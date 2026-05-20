@@ -21,21 +21,33 @@ export default function ContactSection() {
       </div>
       <div className="relative flex flex-col items-center gap-4 text-center">
         <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-          Get in Touch
+          Let&apos;s build something.
         </h2>
         <p className="mx-auto max-w-lg text-muted-foreground text-balance">
-          Want to chat? Just shoot me a dm{" "}
+          Open to senior / staff full-stack roles and select contract work. Email{" "}
           <Link
-            href={DATA.contact.social.X.url}
+            href={`mailto:${DATA.contact.email}`}
+            className="text-blue-500 hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+          >
+            {DATA.contact.email}
+          </Link>{" "}
+          or ping me on{" "}
+          <Link
+            href={DATA.contact.social.LinkedIn.url}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500 hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
           >
-            with a direct question on twitter
-          </Link>{" "}
-          and I&apos;ll respond whenever I can. I will ignore all
-          soliciting.
+            LinkedIn
+          </Link>
+          . I reply within 24h.
         </p>
+        <div className="flex items-center gap-2 font-mono text-[11px] text-muted-foreground">
+          <span>shortcut</span>
+          <kbd className="rounded border border-border bg-card px-1.5 py-0.5">⌘K</kbd>
+          <span>→</span>
+          <span>Copy email</span>
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,61 @@
+---
+title: "Arabic-First: RTL Is Not a CSS Property"
+publishedAt: "2026-05-14"
+updatedAt: "2026-05-14"
+author: "Hamdy Mohammed"
+summary: "Most of my client work ships to the MENA market in Arabic. Treating right-to-left as a flag you flip at the end is the most expensive way to do it."
+---
+
+Most of the products I build serve the MENA market, and most ship in Arabic first. Over enough of those projects, one lesson keeps arriving: **right-to-left is not `direction: rtl`.**
+
+It is tempting to think it is. Set `dir="rtl"`, watch the text flow the other way, ship it. Then the bug reports start.
+
+## What RTL actually touches
+
+`direction: rtl` flips text. It does not flip everything text lives inside.
+
+- **Layout.** Anything positioned with `left` / `right` or `margin-left` stays pinned to the physical side. Your sidebar is now on the wrong edge.
+- **Icons.** A back arrow points the wrong way. Chevrons, "next" arrows, progress bars — anything with a direction now lies.
+- **Forms.** Input alignment, label position, the icon inside a field — all need to mirror.
+- **Numbers and dates.** Arabic content with Latin or Arabic-Indic numerals, and — in the Gulf — an entire *calendar* you did not plan for.
+
+The flag flips one of these. The other four are work.
+
+## Logical properties do most of the job
+
+The single highest-leverage change: stop writing physical directions. CSS logical properties resolve against the writing direction automatically.
+
+```css title="the swap"
+/* physical — pinned to the left forever */
+margin-left: 1rem;
+padding-right: 0.5rem;
+
+/* logical — follows the text direction */
+margin-inline-start: 1rem;
+padding-inline-end: 0.5rem;
+```
+
+Write `inline-start` instead of `left`, and one stylesheet serves both directions — no `[dir="rtl"]` override soup.
+
+## The calendar you did not budget for
+
+On Aqd Ejar — a platform for registering Saudi rental contracts — dates were not a formatting detail. Saudi contracts run on the **Hijri** calendar. Every date input had to let a user pick a Hijri date, show its Gregorian equivalent, and stay correct in both.
+
+No off-the-shelf component did this well, so I built one — and extracted it into `vue-hijri-gregorian-datepicker`, a bilingual AR/EN Hijri/Gregorian datepicker, [published to npm](https://www.npmjs.com/package/vue-hijri-gregorian-datepicker).
+
+The point is not the package. The point is that "support Arabic" quietly contained "support a different calendar system" — and that is the kind of cost you only see if you design Arabic-first instead of discovering it mid-translation.
+
+## Design Arabic-first, not English-then-flipped
+
+The deepest fix is not technical. It is the order you work in.
+
+Build the English UI, then translate, and RTL is a retrofit — every layout decision was made for the wrong direction and has to be re-examined. Design **Arabic-first**, and RTL is the default while English is the easy mirror, because logical properties flip cleanly the *other* way too.
+
+| Approach | RTL is… | Cost |
+|----------|---------|------|
+| English first, translate later | a retrofit | high, and recurring |
+| Arabic-first | the default | paid once, up front |
+
+It is more work at the start. It is far less work than retrofitting a finished product — and the result is an Arabic UI that feels native, not converted.
+
+For the MENA market, that difference is the whole product.

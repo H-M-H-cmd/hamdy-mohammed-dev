@@ -15,8 +15,28 @@ function LogoImage({ src, alt }: { src: string; alt: string }) {
   const [imageError, setImageError] = useState(false);
 
   if (!src || imageError) {
+    const initials =
+      alt
+        .split(/\s+/)
+        .filter((w) => w && /[a-z0-9]/i.test(w[0]))
+        .slice(0, 2)
+        .map((w) => w[0])
+        .join("")
+        .toUpperCase() || "·";
+    const hue =
+      Array.from(alt).reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
     return (
-      <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none" />
+      <div
+        aria-hidden
+        className="size-8 md:size-10 rounded-full border shadow ring-2 ring-border flex items-center justify-center flex-none font-mono text-[11px] md:text-xs font-bold text-white"
+        style={{
+          backgroundImage: `linear-gradient(135deg, hsl(${hue} 65% 45%), hsl(${
+            (hue + 45) % 360
+          } 65% 32%))`,
+        }}
+      >
+        {initials}
+      </div>
     );
   }
 

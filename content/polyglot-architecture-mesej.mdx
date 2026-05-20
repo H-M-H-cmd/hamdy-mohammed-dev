@@ -1,0 +1,64 @@
+---
+title: "Four Runtimes, One Product: The Architecture Behind a WhatsApp SaaS"
+publishedAt: "2026-05-05"
+updatedAt: "2026-05-05"
+author: "Hamdy Mohammed"
+summary: "Mesej runs on a Laravel monolith, a Nuxt web app, an Expo mobile app, and a Node.js microservice. Polyglot is a cost — here is when it is worth paying."
+---
+
+Mesej is a WhatsApp Business platform — shared team inbox, AI agents, a visual automation builder, broadcast campaigns. Under the hood it runs **four separate runtimes**:
+
+- a **Laravel 12 Octane** monolith — the core API and business logic
+- a **Nuxt 3** web client
+- an **Expo** mobile app
+- a standalone **Node.js** microservice running `whatsapp-web.js`
+
+Four runtimes is not a flex. It is a cost. Here is why Mesej pays it anyway.
+
+## The forcing function
+
+Most of Mesej did not *want* to be polyglot. Laravel handles the API, the database, the queues, the AI calls — comfortably. Nuxt and Expo are just clients.
+
+The Node.js service is the exception, and it is not a choice. The most reliable way to drive a WhatsApp session without the official Cloud API is `whatsapp-web.js`, which automates WhatsApp Web through a headless browser. It is **Node-only** — there is no Laravel equivalent, because the dependency *is* a browser.
+
+So the architecture split along a hard line: the one thing that must be Node lives in its own service; everything else stays in the monolith.
+
+> Polyglot worked here because it was *forced*, not chosen. One runtime per language, drawn on a real boundary — not scattered for taste.
+
+## Keeping four runtimes from becoming four products
+
+The danger of polyglot is drift: four codebases, four ideas of what a "conversation" is, four bugs.
+
+Mesej avoids that with two rules.
+
+**One source of truth.** The Laravel monolith owns the data and the domain. The Node service does not have its own database — it is a *driver*. It receives commands, emits events, and stays dumb. The web and mobile clients render state; they do not invent it.
+
+**One nervous system.** Every runtime reconciles over **Reverb** websockets. When a message lands in the Node service, it does not call three clients — it emits one event, and the inbox updates everywhere at once.
+
+```text title="message in"
+WhatsApp ──▶ Node service ──▶ Laravel (persist, run AI)
+                                  │
+                                  ▼
+                            Reverb broadcast
+                          ┌───────┴───────┐
+                          ▼               ▼
+                     Nuxt web        Expo mobile
+```
+
+The Node service's entire job is: *receive, forward, broadcast.* It never decides anything.
+
+## The honest cost
+
+Polyglot is not free, even done well:
+
+- **Two languages to keep sharp** — PHP and TypeScript, two dependency trees, two sets of CVEs.
+- **The boundary needs contracts.** The Laravel-to-Node seam is a real API. It needs versioning and validation, or it rots.
+- **Local development is heavier.** "Run the app" means four processes, not one.
+
+## The rule I took away
+
+Reach for another runtime only when something **cannot** live in your main one — a Node-only library, a Python ML model, a Go binary for throughput. That is a boundary worth a service.
+
+Reaching for one because a language is fashionable is how you end up with four products wearing a trench coat.
+
+Mesej is polyglot because WhatsApp made it polyglot. Everywhere it had a choice, it stayed boring.

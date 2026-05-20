@@ -1,0 +1,63 @@
+---
+title: "Zero-Downtime Deploys on a Bare VPS — Without Kubernetes"
+publishedAt: "2026-04-10"
+updatedAt: "2026-04-10"
+author: "Hamdy Mohammed"
+summary: "How Manifest ships new versions with no downtime on a single VPS, using Docker and a blue-green swap — and why Kubernetes was the wrong tool."
+---
+
+Manifest runs on a single VPS. Not a managed cluster, not a fleet — one box I can SSH into. And it deploys with **zero downtime**.
+
+People assume zero-downtime means Kubernetes. It does not. It means you never point traffic at a process that is not ready. You can do that with a reverse proxy and two containers.
+
+## Why not Kubernetes
+
+I am a solo founder. Kubernetes would have bought me rolling updates and self-healing — and charged me a control plane, a YAML dialect, an ingress controller, and a permanent second job keeping it alive.
+
+The honest trade: **Kubernetes solves problems I do not have yet.** I do not run dozens of services across many machines. I run one application that must not blink during a deploy. That is a much smaller problem.
+
+## The blue-green idea
+
+Blue-green is two identical environments and a switch:
+
+1. **Blue** is live, serving traffic.
+2. Deploy the new version to **green**, alongside blue.
+3. Wait until green passes a health check.
+4. Flip the proxy: traffic now goes to green.
+5. Drain and stop blue.
+
+If green never gets healthy, you never flip. The worst case is a failed deploy with users none the wiser — not an outage.
+
+## What it looks like on one box
+
+Two container sets, a reverse proxy in front, and a health endpoint that means *actually* ready — database reachable, migrations applied, queues connected.
+
+```bash title="deploy.sh"
+# bring up the idle colour
+docker compose -p manifest_green up -d --build
+
+# wait until it is genuinely ready
+until curl -sf http://localhost:8081/health; do sleep 2; done
+
+# point the proxy at green, reload without dropping connections
+ln -sf upstream-green.conf /etc/nginx/conf.d/upstream.conf
+nginx -s reload
+
+# drain and retire the old colour
+docker compose -p manifest_blue down
+```
+
+The two pieces that make it safe:
+
+- **A real health check.** `/health` returns 200 only when the app can serve a real request. A container that is *running* is not a container that is *ready*.
+- **A graceful proxy reload.** `nginx -s reload` finishes in-flight requests on the old upstream before retiring it. No connection is cut mid-response.
+
+Database migrations run against green *before* the flip. Because Manifest is [database-per-tenant](/blog/database-per-tenant), that step is itself a fan-out — every tenant database is migrated and verified before any traffic moves.
+
+## The limits — stated honestly
+
+One VPS is one machine. This setup gives me zero-downtime *deploys*; it does not give me high availability against *hardware* failure. If the box dies, the site is down until I restore it.
+
+That is a deliberate trade. The failure I ship every week is a deploy. The failure I might see once a year is a dead host. I automated away the weekly one. When the platform earns it, the host becomes two — and the blue-green logic barely changes.
+
+Start with the problem you actually have.

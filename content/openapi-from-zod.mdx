@@ -1,0 +1,71 @@
+---
+title: "One Source of Truth: Generating an OpenAPI Spec from Zod"
+publishedAt: "2026-02-20"
+updatedAt: "2026-02-20"
+author: "Hamdy Mohammed"
+summary: "BrixFund's API documentation cannot drift from its validation, because both are generated from the same Zod schemas. Here is how, and why it matters."
+---
+
+BrixFund is a regulated real-estate investment platform — a 27-endpoint REST API behind a Next.js app. Regulated means audited, and audited means the documentation has to be *true*.
+
+Most API docs are not true. They are true the day they are written, and a little less true every commit after.
+
+## Two sources of truth is one lie
+
+The usual setup keeps two descriptions of every endpoint:
+
+1. The **validator** — the code that actually rejects bad requests at runtime.
+2. The **spec** — the OpenAPI document that tells everyone else how the endpoint behaves.
+
+They start identical. Then someone makes a field optional in the validator, ships it, and forgets the spec. Now the document lies. Nobody notices until an integration breaks against docs that describe an endpoint which no longer exists.
+
+The fix is not discipline. Discipline does not survive a deadline. The fix is to **delete one of the two sources.**
+
+## The validator is the survivor
+
+Of the two, the validator cannot be deleted — without it, bad data reaches the database. So the validator stays, and the spec is *derived* from it.
+
+BrixFund writes every request and response shape once, as a Zod schema:
+
+```typescript title="schemas/investment.ts"
+export const CreateInvestment = z.object({
+  propertyId: z.string().uuid(),
+  shares: z.number().int().positive(),
+  currency: z.enum(["AED", "USD"]),
+});
+```
+
+That schema validates the request at runtime. The *same* schema, passed through a Zod-to-OpenAPI bridge, becomes the documented contract:
+
+```typescript title="openapi.ts"
+registry.registerPath({
+  method: "post",
+  path: "/investments",
+  request: {
+    body: { content: { "application/json": { schema: CreateInvestment } } },
+  },
+  responses: {
+    201: { description: "Created" /* ...InvestmentSchema */ },
+  },
+});
+```
+
+The OpenAPI document is now a *build artifact*, not a hand-maintained file. When `CreateInvestment` changes, the validation changes, the TypeScript type changes, and the published spec changes — in one edit.
+
+## What this buys you
+
+| Without it | With it |
+|------------|---------|
+| Docs drift silently | Docs cannot drift — they are generated |
+| Types, validators, docs maintained apart | One schema feeds all three |
+| "Is the spec current?" is a guess | The spec is current by construction |
+
+For a regulated product the last row is the one that matters. "The documentation matches the implementation" stops being a promise and becomes a property of the build.
+
+## The honest cost
+
+It is not free. You take on a bridge library and its `registerPath` boilerplate, and the Zod-to-OpenAPI mapping has edges — complex unions and recursive types need coaxing.
+
+But that cost is paid *once per endpoint*, in code review, where mistakes are cheap. The alternative cost — docs that quietly lie — is paid later, by someone else, as an incident.
+
+Make the spec a thing you *compile*, not a thing you *remember*.

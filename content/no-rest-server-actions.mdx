@@ -1,0 +1,52 @@
+---
+title: "A Next.js App With No REST API"
+publishedAt: "2026-03-28"
+updatedAt: "2026-03-28"
+author: "Hamdy Mohammed"
+summary: "Swiss Heritage is a live-auction platform built entirely on Next.js Server Actions — no REST endpoints at all. When that is the right call, and when it is not."
+---
+
+Swiss Heritage is a live-auction platform — registrations, bids, counter-offers, shipments. It has no REST API. Not a thin one. None.
+
+Every server interaction goes through a **Server Action**: a typed function the client calls directly, with no route, no `fetch`, no JSON envelope to design.
+
+## What a REST API actually is
+
+A REST API is a *serialization boundary*. You take a function, give it a URL, define how its arguments cross the wire as a request and its result as a response — and then maintain that translation forever.
+
+That boundary earns its keep when you have **consumers you do not control**: a mobile app, a partner integration, a public API. They need a stable, language-agnostic contract.
+
+Swiss Heritage has exactly one consumer: its own Next.js frontend. For that case, a REST API is a translation layer between two halves of the *same codebase, in the same language*. You serialize TypeScript into JSON so you can deserialize it back into TypeScript a few milliseconds later.
+
+Server Actions delete that layer. The client calls a function; the framework handles the wire.
+
+## Discipline still required: three tiers
+
+"No REST" does not mean "no architecture". Without route handlers as a natural seam, you have to draw the seam yourself. Swiss Heritage uses a strict three-tier split:
+
+```text title="request path"
+Server Action  ──▶  Service         ──▶  Data
+(thin)              (domain logic)       (Drizzle)
+```
+
+- **Actions** are thin: authenticate, validate input, call a service. No business logic.
+- **Services** own the domain — placing a bid, accepting a counter-offer, the rules.
+- **Data** is Drizzle, and nothing above it writes SQL.
+
+The temptation with Server Actions is to drop database calls straight into the action because you *can*. That is how you get a 300-line action nobody can test. The tiers are the guardrail the route boundary used to provide for free.
+
+## When I would still build the REST API
+
+Server Actions were the right call here. They would be the wrong call if Swiss Heritage had:
+
+- a **mobile app** — it cannot call a Server Action; it needs HTTP
+- **third-party consumers** — they need a versioned, documented contract
+- **heavy public, cacheable reads** — Server Actions are POSTs; they do not get CDN `GET` caching
+
+Those are real reasons, and they are all about *who consumes the API*. None applied here.
+
+## The rule
+
+Build a REST API when something **outside your app and your language** needs to talk to it. If the only caller is your own frontend, the API is overhead wearing the costume of architecture.
+
+Swiss Heritage skipped it — and kept the architecture anyway, in the three tiers behind every action.

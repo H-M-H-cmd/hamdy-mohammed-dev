@@ -1,0 +1,52 @@
+---
+title: "Plain Markdown as a Programming Interface"
+publishedAt: "2026-04-22"
+updatedAt: "2026-04-22"
+author: "Hamdy Mohammed"
+summary: "On TRAXON, users write crypto-trading strategies in plain markdown and AI agents execute them. Why markdown beats a form or a custom DSL — and the safety line that makes it work."
+---
+
+TRAXON is a platform of AI crypto-trading agents. A user describes a strategy, and a LangGraph agent executes it across exchanges. The interesting question was never the agent. It was: **how does a user describe a strategy?**
+
+There were three options.
+
+## Form, DSL, or prose
+
+**A form.** Dropdowns and number inputs. Safe, validatable — and a ceiling. A form can only express the strategies you anticipated when you built it. The first user with an idea you did not foresee is stuck.
+
+**A custom DSL.** Maximum precision. Also: a parser to write, a grammar to document, error messages to design, and a language every user must *learn* before they can do anything. You have built a second product.
+
+**Plain markdown.** A format every user already knows — and, crucially, a format an LLM reads natively. No parser, no grammar, no tutorial. The user writes intent in prose; the strategy document *is* the input.
+
+TRAXON picked markdown.
+
+## The document is the program
+
+A strategy on TRAXON is a markdown file — headings, bullet points, plain sentences describing entry conditions, risk limits, exit rules. The agent reads it the way a junior trader would read a brief.
+
+This collapses a whole layer. There is no "strategy schema" sitting between the user's idea and the system. The thing the user writes is the thing the agent runs.
+
+## The line that makes it safe
+
+Here is the part that matters — because "an LLM runs your trading strategy" should make you nervous. It should.
+
+**The LLM never executes anything.** It does exactly one job: read the markdown and emit a *structured, scored signal* — a proposed action with explicit parameters. That signal then crosses into deterministic code, which validates it, checks it against hard risk limits, and only then places an order.
+
+```text title="execution path"
+markdown strategy ──▶ LLM agent ──▶ structured signal ──▶ risk gate ──▶ exchange
+  (fuzzy intent)       (interpret)    (typed proposal)     (deterministic)
+```
+
+> The LLM proposes. The code disposes.
+
+The language model lives entirely on the fuzzy side of that line — turning prose into a typed proposal. Everything that can move money is deterministic, validated, and bounded. An ambiguous strategy produces a rejected signal, not a wrong trade.
+
+## The honest cost
+
+Markdown is expressive *because* it is loose, and loose means ambiguous. Two users will write the same intent three different ways, and some strategies are genuinely unclear.
+
+So the validation layer cannot be an afterthought — it is the product. And when intent is too vague to act on safely, the right behaviour is to **refuse and ask**, not to guess.
+
+That is the trade: markdown gives you an interface with no learning curve and no expressiveness ceiling, and in exchange you must build a rigorous, deterministic gate behind it.
+
+For TRAXON, that was the right trade. Let users speak normally — and never let the model past the gate.

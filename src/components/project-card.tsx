@@ -8,11 +8,47 @@ import Link from "next/link";
 import { useState } from "react";
 import Markdown from "react-markdown";
 
-function ProjectImage({ src, alt }: { src: string; alt: string }) {
+function ProjectImage({ src, alt, title, tags }: { src: string; alt: string; title?: string; tags?: readonly string[] }) {
   const [imageError, setImageError] = useState(false);
 
   if (!src || imageError) {
-    return <div className="w-full h-48 bg-muted" />;
+    const initials = (title ?? alt ?? "·")
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((w) => w[0])
+      .join("")
+      .toUpperCase();
+    const hue =
+      Array.from(title ?? alt ?? "x").reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
+    return (
+      <div
+        className="relative w-full h-48 overflow-hidden flex items-end p-4"
+        style={{
+          backgroundImage: `linear-gradient(135deg, hsl(${hue} 70% 45%) 0%, hsl(${(hue + 50) % 360} 70% 30%) 100%)`,
+        }}
+      >
+        <div
+          className="absolute inset-0 opacity-[0.15]"
+          style={{
+            backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+            backgroundSize: "18px 18px",
+          }}
+        />
+        <div className="absolute top-4 left-4 font-mono text-[60px] leading-none font-bold text-white/90 tracking-tighter">
+          {initials}
+        </div>
+        <div className="relative flex flex-wrap gap-1 z-10">
+          {(tags ?? []).slice(0, 3).map((t) => (
+            <span
+              key={t}
+              className="rounded-md bg-black/30 px-2 py-0.5 text-[10px] font-mono text-white backdrop-blur-sm"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -77,10 +113,8 @@ export function ProjectCard({
               playsInline
               className="w-full h-48 object-cover"
             />
-          ) : image ? (
-            <ProjectImage src={image} alt={title} />
           ) : (
-            <div className="w-full h-48 bg-muted" />
+            <ProjectImage src={image ?? ""} alt={title} title={title} tags={tags} />
           )}
         </Link>
         {links && links.length > 0 && (

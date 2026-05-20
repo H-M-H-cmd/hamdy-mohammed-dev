@@ -1,0 +1,64 @@
+---
+title: "Database per Tenant: Giving Every Customer Their Own Postgres"
+publishedAt: "2026-03-15"
+updatedAt: "2026-03-15"
+author: "Hamdy Mohammed"
+summary: "Why Manifest ERP runs a separate Postgres database for every company on the platform — the isolation it buys, and the price you pay for it."
+---
+
+When I started building Manifest — a multi-tenant ERP for Egyptian manufacturers and exporters — the very first architectural decision was also the hardest to reverse: **how do tenants share a database?**
+
+There are three common answers. I picked the most expensive one, on purpose.
+
+## The three models
+
+| Model | Isolation | Cost to run | Cost to operate |
+|-------|-----------|-------------|-----------------|
+| Shared schema, `tenant_id` column | Weakest | Lowest | Lowest |
+| Schema per tenant | Medium | Low | Medium |
+| **Database per tenant** | **Strongest** | **Highest** | **Highest** |
+
+The shared-schema model is what most SaaS apps reach for: one set of tables, every row tagged with a `tenant_id`, and every query filtered on it. It is cheap and it scales — until the day one missing `WHERE tenant_id = ?` leaks Company A's payroll into Company B's report.
+
+For a generic todo app, that risk is acceptable. For an ERP holding a manufacturer's costs, suppliers, and finances, it is not. A single forgotten filter is a data breach.
+
+## What database-per-tenant buys you
+
+Manifest gives every company its **own Postgres database**. That one decision pays back in several ways:
+
+- **Isolation is structural, not disciplined.** A query physically cannot reach another tenant's data, because it is connected to a different database. There is no `tenant_id` to forget.
+- **Blast radius is one tenant.** A bad migration, a runaway query, a corrupted index — it stays contained.
+- **Backup and restore is per customer.** I can snapshot, export, or roll back one company without touching anyone else. "Can you restore our data to last Tuesday?" becomes a real answer.
+- **No noisy neighbour.** One tenant's heavy month-end reporting does not starve everyone else's connection pool.
+
+## What it costs you
+
+None of that is free. The bill arrives in operations.
+
+**Connection management.** You cannot open a pool per database and call it a day — a hundred tenants would exhaust Postgres. Manifest keeps a small registry that resolves the tenant from the request, hands back a cached data source, and reaps idle connections.
+
+```typescript title="tenant-connection.ts"
+async function getTenantDataSource(tenantId: string): Promise<DataSource> {
+  const existing = pool.get(tenantId);
+  if (existing?.isInitialized) return existing;
+
+  const ds = new DataSource({
+    type: "postgres",
+    database: `tenant_${tenantId}`,
+    // ...host, credentials, entities
+  });
+  await ds.initialize();
+  pool.set(tenantId, ds);
+  return ds;
+}
+```
+
+**Migrations multiply.** A schema change is no longer one migration — it is one migration run N times, and it has to be idempotent and ordered. Provisioning a new tenant means *creating* a database and bringing it to the current schema version before the company ever logs in.
+
+**Routing is now your problem.** Every request has to resolve to a tenant *before* it touches data. Get that wrong and you have the exact breach you were trying to prevent — just one layer up.
+
+## Would I do it again?
+
+For Manifest — 55+ backend modules, 125+ entities, financial data, solo-operated — yes, without hesitation. The operational tax is real, but it is *predictable* work I do once and automate. The shared-schema risk is unpredictable work that shows up as an incident.
+
+Pick the model that matches your blast radius. If a leak is an apology, share the schema. If a leak is a lawsuit, give them their own database.
