@@ -423,6 +423,18 @@ export const DATA = {
         "Detail Oriented",
       ],
     },
+    {
+      quote:
+        "Great job on the trial. One of the strongest deliverables we've seen. Highly recommended.",
+      author: "Private client",
+      role: "Dubai, UAE",
+      project: "Senior Next.js Developer — AI SaaS Rebuild",
+      rating: 5,
+      date: "Jun 2026",
+      source: "Upwork",
+      sourceUrl: "https://www.upwork.com/freelancers/hamdym13",
+      highlights: [],
+    },
   ] as ReadonlyArray<{
     quote: string;
     author: string;
@@ -434,4 +446,10 @@ export const DATA = {
     sourceUrl: string;
     highlights: readonly string[];
   }>,
+  upwork: {
+    url: "https://www.upwork.com/freelancers/hamdym13",
+    jobSuccess: "100%",
+    rating: 5.0,
+    reviews: 2,
+  },
 } as const;

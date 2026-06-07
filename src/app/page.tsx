@@ -322,7 +322,21 @@ export default async function Page() {
       <section id="testimonials" className="scroll-mt-16">
         <div className="flex min-h-0 flex-col gap-y-6">
           <BlurFade delay={BLUR_FADE_DELAY * 14}>
-            <h2 className="text-xl font-bold">Testimonials</h2>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-xl font-bold">Testimonials</h2>
+              <a
+                href={DATA.upwork.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-fit text-sm text-muted-foreground underline-offset-2 transition-colors hover:text-foreground hover:underline"
+              >
+                <span className="font-medium text-foreground">
+                  {DATA.upwork.jobSuccess} Job Success
+                </span>{" "}
+                &middot; {DATA.upwork.rating.toFixed(1)} rating across{" "}
+                {DATA.upwork.reviews} reviews on Upwork &rarr;
+              </a>
+            </div>
           </BlurFade>
           <BlurFade delay={BLUR_FADE_DELAY * 15}>
             <TestimonialsSection />
