@@ -7,16 +7,11 @@ export default function TestimonialsSection() {
   if (testimonials.length === 0) return null;
 
   return (
-    <div
-      className={cn(
-        "grid grid-cols-1 gap-4",
-        testimonials.length > 1 && "sm:grid-cols-2",
-      )}
-    >
+    <div className="grid grid-cols-1 gap-4">
       {testimonials.map((t) => (
         <figure
           key={t.quote}
-          className="flex flex-col gap-4 rounded-xl border border-border bg-card/40 p-6"
+          className="flex flex-col gap-4 rounded-xl border border-border bg-card/40 p-6 sm:p-8"
         >
           <div className="flex items-center justify-between">
             <Quote
@@ -43,7 +38,7 @@ export default function TestimonialsSection() {
             </div>
           </div>
 
-          <blockquote className="text-pretty text-[15px] leading-relaxed text-foreground">
+          <blockquote className="text-pretty text-base leading-relaxed text-foreground sm:text-lg">
             &ldquo;{t.quote}&rdquo;
           </blockquote>
 

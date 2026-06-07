@@ -333,8 +333,7 @@ export default async function Page() {
                 <span className="font-medium text-foreground">
                   {DATA.upwork.jobSuccess} Job Success
                 </span>{" "}
-                &middot; {DATA.upwork.rating.toFixed(1)} rating across{" "}
-                {DATA.upwork.reviews} reviews on Upwork &rarr;
+                &middot; {DATA.upwork.rating.toFixed(1)} rating on Upwork &rarr;
               </a>
             </div>
           </BlurFade>
