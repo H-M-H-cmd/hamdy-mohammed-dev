@@ -9,11 +9,11 @@ export const DATA = {
   location: "Alexandria, Egypt",
   locationLink: "https://www.google.com/maps/place/Alexandria",
   description:
-    "Full-stack engineer. I design and ship production software end-to-end — web, mobile, and the backend beneath both.",
+    "Senior full-stack engineer. I design and ship production software end-to-end — web, mobile, and the backend beneath both.",
   headline:
     "One engineer, whole product — from the database to the deploy.",
   summary:
-    "I turn ambitious product ideas into running software. I founded [**Prolink**](https://prolinkeg.com) to build and operate an ERP that Egyptian manufacturers and exporters actually use to run their businesses — quotes, production, logistics, finance, the lot. Before and alongside that, I've delivered full-stack work for clients across the MENA market for years.\n\nA taste of what that looks like: a regulated UAE fintech with KYC/AML, Stripe rails, and k6 load-testing. AI agents that read plain-markdown trading strategies and execute them across crypto exchanges. A WhatsApp Business SaaS spanning a Laravel monolith, a Nuxt web app, an Expo mobile app, and a Node.js microservice. A Saudi rental-contract platform wired into government Ejar and Nafath APIs.\n\nThe common thread isn't a framework — it's ownership. I'm comfortable choosing the stack, shaping the data model, designing the flows, writing the API, building the UI, and deploying it somewhere that survives Monday morning. I care about the seam between design and engineering — not the posture of either.\n\nIf you're building something ambitious and want one person who can own it end-to-end, [let's talk](mailto:aljzarh46@gmail.com).",
+    "I turn ambitious product ideas into running software. I founded [**Prolink**](https://prolinkeg.com) to build and operate an ERP that Egyptian manufacturers and exporters actually use to run their businesses — quotes, production, logistics, finance, the lot. Before and alongside that, I've delivered full-stack work for clients across the MENA market for more than five years.\n\nA taste of what that looks like: a regulated UAE fintech with KYC/AML, Stripe rails, and k6 load-testing. AI agents that read plain-markdown trading strategies and execute them across crypto exchanges. A WhatsApp Business SaaS spanning a Laravel monolith, a Nuxt web app, an Expo mobile app, and a Node.js microservice. A Saudi rental-contract platform wired into government Ejar and Nafath APIs.\n\nThe common thread isn't a framework — it's ownership. I'm comfortable choosing the stack, shaping the data model, designing the flows, writing the API, building the UI, and deploying it somewhere that survives Monday morning. I care about the seam between design and engineering — not the posture of either.\n\nIf you're building something ambitious and want one person who can own it end-to-end, [let's talk](mailto:aljzarh46@gmail.com).",
   facts: [
     { label: "Role", value: "Founder · Full-stack" },
     { label: "Scope", value: "DB → UI → Deploy" },
@@ -86,7 +86,7 @@ export const DATA = {
       start: "Nov 2025",
       end: "Present",
       description:
-        "Founded Prolink to build Manifest — a multi-tenant ERP for Egyptian manufacturing and export companies. ~157k LOC of TypeScript across NestJS + React, 55 backend modules, 125+ DB entities, true database-per-tenant PostgreSQL isolation, blue-green zero-downtime Docker deploys on a bare VPS, AI chat via @ai-sdk. Architecture, infra, and shipping — solo.",
+        "Founded Prolink to build Manifest — a multi-tenant ERP for Egyptian manufacturing and export companies. ~157k LOC of TypeScript across NestJS 11 + React, 55 backend modules, 125+ DB entities, true database-per-tenant PostgreSQL isolation via request-scoped tenant middleware, blue-green zero-downtime Docker deploys behind Caddy on a bare VPS at 99.9% uptime, AI chat via @ai-sdk. Architecture, infra, and shipping — solo.",
     },
     {
       company: "Brixfund Investments LLC",
@@ -105,7 +105,7 @@ export const DATA = {
       href: "https://domais.sa",
       badges: [],
       location: "Saudi Arabia · Remote",
-      title: "Full-stack Engineer",
+      title: "Senior Full-stack Engineer",
       logoUrl: "",
       start: "2024",
       end: "Present",
@@ -159,6 +159,42 @@ export const DATA = {
       end: "2025",
       description:
         "Built TRAXON — an AI crypto-trading-agents SaaS where users write strategies in plain markdown and LangGraph agents execute them across Binance, Aster DEX, and ccxt exchanges. Turborepo monorepo: Next.js 16 web, a NestJS worker (tRPC + BullMQ), and an Expo mobile app sharing a 26-table Drizzle schema. Multi-LLM routing and metered Stripe billing for AI credits.",
+    },
+    {
+      company: "Lexmodo",
+      href: "https://www.lexmodo.com",
+      badges: [],
+      location: "Remote",
+      title: "Senior Frontend Developer",
+      logoUrl: "",
+      start: "2024",
+      end: "2025",
+      description:
+        "Standardized the frontend on a shared component library against high-frequency REST APIs for a no-code commerce platform, and drove cross-functional alignment with backend on API contracts and ergonomics.",
+    },
+    {
+      company: "Riadiat SA",
+      href: "",
+      badges: ["Sole Developer"],
+      location: "Remote",
+      title: "Lead Frontend Engineer",
+      logoUrl: "",
+      start: "2022",
+      end: "2024",
+      description:
+        "Led end-to-end client-side architecture for a multi-module enterprise web app as sole developer. Built a reusable Atomic Design + Storybook library that cut new-module UI time ~30% and dashboard initial-load ~25%.",
+    },
+    {
+      company: "Scandiweb",
+      href: "https://scandiweb.com",
+      badges: [],
+      location: "Remote",
+      title: "Web Developer",
+      logoUrl: "",
+      start: "2021",
+      end: "2022",
+      description:
+        "Shipped responsive e-commerce frontends on Magento 2 with strict cross-browser and accessibility standards in an Agile, Git-based, Dockerized workflow.",
     },
   ],
   education: [] as ReadonlyArray<{
