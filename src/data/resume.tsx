@@ -107,7 +107,7 @@ export const DATA = {
       location: "Saudi Arabia · Remote",
       title: "Senior Full-stack Engineer",
       logoUrl: "",
-      start: "2024",
+      start: "2025",
       end: "Present",
       description:
         "Delivered branded web products and admin tooling across a portfolio of client projects — Mesej, Aqd Ejar, Amiral, Masajed, Chatla. Laravel (Octane) + Nuxt 3 / Vue and Next.js stacks, Arabic-first UIs, Hijri-aware inputs, government API integrations, deployed on managed VPS.",
@@ -177,9 +177,9 @@ export const DATA = {
       href: "",
       badges: ["Sole Developer"],
       location: "Remote",
-      title: "Lead Frontend Engineer",
+      title: "Frontend Engineer (Sole Developer)",
       logoUrl: "",
-      start: "2022",
+      start: "2023",
       end: "2024",
       description:
         "Led end-to-end client-side architecture for a multi-module enterprise web app as sole developer. Built a reusable Atomic Design + Storybook library that cut new-module UI time ~30% and dashboard initial-load ~25%.",
@@ -192,7 +192,7 @@ export const DATA = {
       title: "Web Developer",
       logoUrl: "",
       start: "2021",
-      end: "2022",
+      end: "2023",
       description:
         "Shipped responsive e-commerce frontends on Magento 2 with strict cross-browser and accessibility standards in an Agile, Git-based, Dockerized workflow.",
     },
@@ -235,7 +235,7 @@ export const DATA = {
     {
       title: "Aqd Ejar — Saudi Rental Contracts",
       href: "https://agd.sa/",
-      dates: "2024 — Present",
+      dates: "2025 — 2026",
       active: true,
       description:
         "SaaS for Saudi real-estate offices to register lease contracts, integrated end-to-end with the government **Ejar** platform and **Nafath** national-ID verification. Laravel 10 Octane + Filament admin + a Vue 3 / PrimeVue SPA. Spun off `vue-hijri-gregorian-datepicker` — a bilingual AR/EN Hijri datepicker **published to npm**.",
@@ -265,7 +265,7 @@ export const DATA = {
     {
       title: "Mesej — WhatsApp Business SaaS",
       href: "https://mesej.app/",
-      dates: "2024 — Present",
+      dates: "2025 — 2026",
       active: true,
       description:
         "WhatsApp Business messaging SaaS — shared inbox, AI agents with file-grounded knowledge, a visual automation-flow engine, and broadcast campaigns. Genuinely **polyglot architecture**: a Laravel 12 Octane monolith, a Nuxt 3 web client, an Expo mobile app, and a standalone Node.js `whatsapp-web.js` microservice — all reconciled over Reverb websockets.",
