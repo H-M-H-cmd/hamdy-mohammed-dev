@@ -4,7 +4,7 @@ import { HomeIcon, NotebookIcon } from "lucide-react";
 export const DATA = {
   name: "Hamdy Mohammed",
   initials: "HM",
-  url: "https://hamdymohammed.dev",
+  url: "https://hamdy-mohammed-dev.vercel.app",
   resumeUrl: "/Hamdy-Mohammed-CV.pdf",
   location: "Alexandria, Egypt",
   locationLink: "https://www.google.com/maps/place/Alexandria",
@@ -56,7 +56,7 @@ export const DATA = {
       },
       LinkedIn: {
         name: "LinkedIn",
-        url: "https://www.linkedin.com/in/hamdy-mohamed-507312236/",
+        url: "https://www.linkedin.com/in/hamdy-mohammed-dev/",
         icon: Icons.linkedin,
         navbar: true,
       },
