@@ -3,6 +3,15 @@ import { withContentCollections } from "@content-collections/next";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: "/Hamdy-Mohammed-CV.pdf",
+        destination: "/Hamdy-Mohammed-Full-Stack-Engineer-CV.pdf",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
