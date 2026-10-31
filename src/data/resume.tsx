@@ -13,7 +13,7 @@ export const DATA = {
   headline:
     "One engineer, whole product — from the database to the deploy.",
   summary:
-    "I turn ambitious product ideas into running software. I founded [**Prolink**](https://prolinkeg.com) to build and operate an ERP that Egyptian manufacturers and exporters actually use to run their businesses — quotes, production, logistics, finance, the lot. Before and alongside that, I've delivered full-stack work for clients across the MENA market for five years.\n\nA taste of what that looks like: a regulated UAE fintech with KYC/AML, Stripe rails, and k6 load-testing. AI agents that read plain-markdown trading strategies and execute them across crypto exchanges. A WhatsApp Business SaaS spanning a Laravel monolith, a Nuxt web app, an Expo mobile app, and a Node.js microservice. A Saudi rental-contract platform wired into government Ejar and Nafath APIs.\n\nThe common thread isn't a framework — it's ownership. I'm comfortable choosing the stack, shaping the data model, designing the flows, writing the API, building the UI, and deploying it somewhere that survives Monday morning. I care about the seam between design and engineering — not the posture of either.\n\nIf you're building something ambitious and want one person who can own it end-to-end, [let's talk](mailto:aljzarh46@gmail.com).",
+    "I turn ambitious product ideas into running software. I founded [**Prolink**](https://prolinkeg.com) to build and operate an ERP that Egyptian manufacturers and exporters actually use to run their businesses — quotes, production, logistics, finance, the lot. Before and alongside that, I've delivered full-stack work for clients across the MENA market for five years.\n\nMost recently I co-founded [**Egypt Trip Maker**](https://egypttripmaker.com), a tailor-made travel company, and built its booking platform in four weeks.\n\nA taste of what that looks like: a regulated UAE fintech with KYC/AML, Stripe rails, and k6 load-testing. AI agents that read plain-markdown trading strategies and execute them across crypto exchanges. A WhatsApp Business SaaS spanning a Laravel monolith, a Nuxt web app, an Expo mobile app, and a Node.js microservice. A Saudi rental-contract platform wired into government Ejar and Nafath APIs.\n\nThe common thread isn't a framework — it's ownership. I'm comfortable choosing the stack, shaping the data model, designing the flows, writing the API, building the UI, and deploying it somewhere that survives Monday morning. I care about the seam between design and engineering — not the posture of either.\n\nIf you're building something ambitious and want one person who can own it end-to-end, [let's talk](mailto:aljzarh46@gmail.com).",
   facts: [
     { label: "Role", value: "Founder · Full-stack" },
     { label: "Scope", value: "DB → UI → Deploy" },
@@ -87,6 +87,18 @@ export const DATA = {
       end: "Present",
       description:
         "Founded Prolink to build Manifest — a multi-tenant ERP for Egyptian manufacturing and export companies. ~157k LOC of TypeScript across NestJS 11 + React, 55 backend modules, 125+ DB entities, true database-per-tenant PostgreSQL isolation via request-scoped tenant middleware, blue-green zero-downtime Docker deploys behind Caddy on a bare VPS at 99.9% uptime, AI chat via @ai-sdk. Architecture, infra, and shipping — solo.",
+    },
+    {
+      company: "Egypt Trip Maker",
+      href: "https://egypttripmaker.com",
+      badges: ["Co-founder"],
+      location: "Remote",
+      title: "Co-founder · Technical Lead",
+      logoUrl: "",
+      start: "Oct 2026",
+      end: "Present",
+      description:
+        "Co-founded a tailor-made Egypt travel company with two tourism partners and built its whole platform as the sole engineer — shipped in 4 weeks over 120+ reviewed PRs. Next.js 16 + Payload CMS 3 on PostgreSQL, one server-side price engine behind booking, proposals and a client portal, an AI trip designer on AI SDK tool calling, and a move from Vercel to a self-hosted Docker + Caddy VPS.",
     },
     {
       company: "Brixfund Investments LLC",
@@ -230,6 +242,32 @@ export const DATA = {
         },
       ],
       image: "/projects/manifest.jpg",
+      video: "",
+    },
+    {
+      title: "Egypt Trip Maker — Tailor-Made Travel",
+      href: "https://egypttripmaker.com/",
+      dates: "Oct 2026 — Present",
+      active: true,
+      description:
+        "Booking platform for a private-trips travel company — packages, Nile cruises, day tours, shore excursions, safaris and transfers across 300+ indexed pages. **One server-side price engine** (seasons, group tiers, multi-currency) drives booking sheets, private proposal links, a client portal and PDF itineraries; an **AI trip designer** uses tool calling so the model never invents a price. Self-hosted on Docker + Caddy.",
+      technologies: [
+        "Next.js 16",
+        "Payload CMS",
+        "TypeScript",
+        "PostgreSQL",
+        "AI SDK",
+        "Docker",
+        "Playwright",
+      ],
+      links: [
+        {
+          type: "Live",
+          href: "https://egypttripmaker.com/",
+          icon: <Icons.globe className="size-3" />,
+        },
+      ],
+      image: "/projects/egypttripmaker.jpg",
       video: "",
     },
     {
